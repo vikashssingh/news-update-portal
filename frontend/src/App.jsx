@@ -7,7 +7,7 @@ const App = () => {
       <h1 className="text-3xl font-bold underline text-red-500">
       Hello world!
     </h1>
-    <Button>Click me</Button>
+    <Button>Click me again</Button>
     </div>
   )
 }

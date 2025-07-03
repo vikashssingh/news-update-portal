@@ -6,10 +6,12 @@ import SignUpForm from './auth/forms/SignUpForm'
 import About from './pages/About'
 import Dashboard from './pages/Dashboard'
 import NewsArticles from './pages/NewsArticles'
+import Header from './components/shaared/header/Header'
 
 const App = () => {
   return (
  <BrowserRouter>
+ <Header/>
  <Routes>
   <Route path = "/" element={<Home/>}/>
   <Route path ="/sign-in" element ={<SignInForm/>}/>

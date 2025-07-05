@@ -22,3 +22,15 @@ app.listen(5000, () => {
 })
 
 app.use("/api/auth", authRoutes)
+// error handle ke liye  show staus code
+app.use((err, req, res, next) => {
+    const statusCode = err.statusCode || 500 // agr error kwe under kuch bhi sstaus nahi hai to hm man lenge 500
+
+    const message = err.message || "Internal server error"
+
+    res.status(statusCode).json({
+        success: false,
+        statusCode,
+        message,
+    })
+})

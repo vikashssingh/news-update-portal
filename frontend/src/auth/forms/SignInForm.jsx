@@ -15,6 +15,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  signInFailure,
+  signInStart,
+  signInSuccess,
+} from "@/redux/user/userSlice";
 
 const formSchema = z.object({
   email: z.string().min({ message: "Invalid email address, " }),
@@ -26,8 +32,13 @@ const formSchema = z.object({
 const SignInForm = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMeassage] = useState(null); // show for error
+
+  const dispatch = useDispatch(); //redux
+  //for laoding and error
+  const { loading, error: errorMessage } = useSelector((state) => state.user);
+
+  // const [loading, setLoading] = useState(false);
+  // const [errorMessage, setErrorMeassage] = useState(null); // show for error
 
   // 1. Define your form.
   const form = useForm({
@@ -41,8 +52,11 @@ const SignInForm = () => {
   // 2. Define a submit handler.
   async function onSubmit(values) {
     try {
-      setLoading(true);
-      setErrorMeassage(null);
+      /*store in redux 
+      setLoading(true)
+      setErrorMeassage(null) 
+      */
+      dispatch(signInStart());
 
       const res = await fetch("/api/auth/signin", {
         method: "POST",
@@ -53,20 +67,25 @@ const SignInForm = () => {
       const data = await res.json();
 
       if (data.success === false) {
-        setLoading(false);
+        // setLoading(false);
         toast({ title: "Sign in Failed! Please try again sir." });
-        return setErrorMeassage(data.mesage);
+        // return setErrorMeassage(data.mesage); //store in redux
+        dispatch(signInFailure(data.message));
       }
-      setLoading(false);
+      // setLoading(false); // store in redux
+
       if (res.ok) {
+        dispatch(signInSuccess(data));
         toast({ title: "Sign in Successful! Enjoy It" });
         navigate("/");
       }
     } catch (error) {
+      /*store in redux
       setErrorMeassage(error.message);
-
       setLoading(false);
+       */
       toast({ title: "Something went Wrong!" });
+      dispatch(signInFailure(error.message));
     }
 
     console.log(values);
@@ -145,7 +164,7 @@ const SignInForm = () => {
           </Form>
 
           <div className="flex gap-2 text-sm mt-5">
-            <span>Have an account ?</span>
+            <span>Don't have an account ?</span>
             <Link to="/sign-up" className="text-blue-500">
               Sign up
             </Link>

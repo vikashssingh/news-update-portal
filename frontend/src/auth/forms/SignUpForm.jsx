@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import GoogleAuth from "@/components/shaared/googleAuth/GoogleAuth";
 
 const formSchema = z.object({
   username: z
@@ -159,6 +160,7 @@ const SignUpForm = () => {
                   <span>Sign Up</span>
                 )}
               </Button>
+              <GoogleAuth />
             </form>
           </Form>
 
